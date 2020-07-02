@@ -1,3 +1,11 @@
+#　拡張子なしファイルを弾く
+*
+!*/
+!*.*
+
+# .DS_Storeを弾く
+.DS_Store
+
 # Prerequisites
 *.d
 
