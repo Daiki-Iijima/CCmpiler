@@ -6,6 +6,9 @@
 # .DS_Storeを弾く
 .DS_Store
 
+# tmpファイルを弾く
+tmp.*
+
 # Prerequisites
 *.d
 
