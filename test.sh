@@ -11,7 +11,7 @@ function test
 
     # 正常に実行できたかチェック
     # $? : 直前に実行したコマンドの終了ステータス
-    # ! : コマンドが失敗した場合に真
+    # ! : 結果を反転
     if [ ! $? ]; then
         echo "Failed to compile $expr"
         exit
@@ -35,5 +35,6 @@ make -s 8cc
 test 0 0
 test 42 42
 
+# -f : エラーを表示しない
 rm -f tmp.out tmp.s
 echo "All tests passed"
