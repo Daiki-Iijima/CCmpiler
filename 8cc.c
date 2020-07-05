@@ -17,7 +17,6 @@ int main(int argc,char **argv)
          "\t.global cmain\n"        //  .global : 後に続くラベルや変数(この場合はcmain)を外部で使用できるようにする
          "cmain:\n"                 //  ラベル宣言
          "\tmov $%d, %%eax\n"       //  mov : AT&T構文になっているので、第二オペランドに第一オペランドを代入
-         "\tadd $100,  %%eax\n"     //  add : 第二オペランドに第一オペランドを加算する
          "\tret\n", val);           //  ret : return 直前で扱かったeaxないの値を返す
          
     return 0;
