@@ -1,24 +1,25 @@
 #!/bin/bash
 
+function compile
+{
+    echo "$1" | ./8cc > tmp.s
+    if [ $? -ne 0 ]; then       # 正常終了したか
+        echo "コンパイル失敗"
+        exit
+    fi
+    gcc -o tmp.out driver.c tmp.s
+    if [ $? -ne 0 ]; then       # 正常終了したか
+        echo "GCC失敗"
+        exit
+    fi
+}
+
 function test
 {
     # 入力を受け取る
     expected="$1"
     expr="$2"
-
-    # 8ccをコンパイルして、出力をtmp.sに保存
-    echo "$expr" | ./8cc > tmp.s
-
-    # 正常に実行できたかチェック
-    # $? : 直前に実行したコマンドの終了ステータス
-    # ! : 結果を反転
-    if [ ! $? ]; then
-        echo "Failed to compile $expr"
-        exit
-    fi
-
-    # -o filename: filenameに指定した名前でファイルを出力
-    gcc -o tmp.out driver.c tmp.s || exit
+    compile "$expr"
     result="`./tmp.out`"
 
     # 正常に指定したファイル名でコンパイルできたかチェック
@@ -28,13 +29,27 @@ function test
     fi
 }
 
+function testfail
+{
+    expr = "$1"
+
+    # 2>&1 : 標準エラー出力の結果を標準出力にマージする
+    # > /dev/null : 標準出力を捨てる
+    echo "$expr" | ./8cc > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then       # 正常終了したか
+        echo "コンパイルに失敗しましたが、テストは成功しました: $expr"
+        exit
+    fi
+}
+
 # -s : コマンドを実行する際に、コマンドの表示を行わない
 make -s 8cc
 
-# 上で定義したtest関数に引数を2つ渡してテスト
 test 0 0
-test 42 42
+test abc '"abc"'
 
-# -f : エラーを表示しない
-rm -f tmp.out tmp.s
+testfail '"abc'
+testfail '0abc'
+
 echo "All tests passed"

@@ -1,12 +1,25 @@
 #include <stdio.h>
 
-// 8ccでglobalで作成したcmainラベルの関数を定義
-extern int cmain(void);
+#define WEAK __attribute__((weak))
+
+extern int intfn(void) WEAK;
+extern char *stringfn(void) WEAK;
 
 int main(int argc,char **argv)
 {
-    int val = cmain();
-    printf("%d\n",val);
+    if(intfn)
+    {
+        printf("%d\n",intfn());
+    }
+    else if(stringfn)
+    {
+        printf("%s\n",stringfn());
+    }
+    else
+    {
+        printf("ここに処理は回ってこないはず");
+    }
+    
 
     return 0;
 }
